@@ -1,0 +1,6 @@
+# dsh-cache-guard bundle: mounts the host-side cache-guard plugin.
+# The plugin reads session logs (request payloads + normalized usage buckets)
+# and exposes a `cache-guard` projection unit + `cache-guard` settings namespace.
+- insert:
+    - id: cache-guard
+      name: dsh-cache-guard
