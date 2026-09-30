@@ -7,7 +7,7 @@ import {
   sinkDynamicSystem,
   stabilize,
   prefixHash,
-} from "../src/shared.js";
+} from "../src/shared.ts";
 
 // canonicalJson: sorted keys
 assert.equal(canonicalJson({ b: 1, a: 2 }), '{"a":2,"b":1}');

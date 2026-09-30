@@ -9,6 +9,11 @@ on:
 permissions:
   contents: write
 
+# Serialize runs so overlapping schedules cannot race the push at the end.
+concurrency:
+  group: daily-feedback
+  cancel-in-progress: false
+
 jobs:
   collect:
     runs-on: ubuntu-latest
@@ -29,3 +34,25 @@ jobs:
           git add FEEDBACK.md
           git diff --cached --quiet || git commit -m "chore: daily feedback report update [skip ci]"
           git push
+
+  # Runs in parallel with `collect` on purpose: a failing test must not stop the
+  # daily report from being generated and committed.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # Node runs the .ts checks directly via type stripping, which is on by
+      # default from Node 23.6 / 24. There is no build step and no npm install:
+      # the checks only reach node builtins and src/shared.ts.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install package and test dependencies
+        run: pip install -e . pytest
+      - name: Run Python regression tests
+        run: pytest -q
+      - name: Run TypeScript pure checks
+        run: npm test
