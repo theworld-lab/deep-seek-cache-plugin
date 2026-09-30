@@ -1,0 +1,11 @@
+# Node
+node_modules/
+
+# TypeScript build output (rebuilt by `prepare` on install and by `prepack` on pack)
+lib/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/

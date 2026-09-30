@@ -54,5 +54,11 @@ jobs:
         run: pip install -e . pytest
       - name: Run Python regression tests
         run: pytest -q
+      - name: Install Node dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
       - name: Run TypeScript pure checks
         run: npm test
